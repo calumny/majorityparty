@@ -41,7 +41,7 @@
           const isBlue = this.state.isBlue;
           return (
             <div className="ballotBox">
-              <h3>Make Your Selection</h3>
+              Make Your Selection
               <form onSubmit={this.submitVote}>
                 <input type="checkbox" name="candidate" value="redCandidate" checked={this.state.candidateSelection==="redCandidate"} onChange={this.changeSelection}/>{this.state.redCandidate}<hr/>
                 <input type="checkbox" name="candidate" value="blueCandidate" checked={this.state.candidateSelection==="blueCandidate"} onChange={this.changeSelection}/>{this.state.blueCandidate}<hr/>
