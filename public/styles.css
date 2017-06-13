@@ -136,9 +136,9 @@ input[type="checkbox"] {
    font-size: inherit;
    font-weight: bold;
    font-family: 'Arvo', serif;
-   border-radius: 3px;
-   margin: 50px;
-   padding: 8px;
+   border-radius: .08em;
+   margin: 1em;
+   padding: .2em;
    color: white;
    background-color: #0052a5;
    border: none;
