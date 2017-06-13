@@ -3,8 +3,10 @@ body {
 }
 
 input[type="checkbox"] {
-  width: 44px;
-  height: 44px;
+  width: 2em;
+  height: 1.3em;
+  -webkit-width: 44px;
+  -webkit-height: 44px;
 }
 
 .ballotBox {
@@ -15,11 +17,11 @@ input[type="checkbox"] {
 }
 
 .ballotBox input[type="submit"] {
-   font-size: 24px;
    font-weight: bold;
    font-family: 'Arvo', serif;
    border-radius: 3px;
-   margin: 1.2em;
+   font-size: 2.618em;
+   margin: 50px;
    padding: 8px;
    color: white;
    background-color: #0052a5;
