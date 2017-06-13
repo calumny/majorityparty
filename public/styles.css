@@ -22,7 +22,7 @@ body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2
   }
 }
 
-h1 {
+h1, .ballotBox {
   font-size: 2em;
   /* 2x body copy size = 32px */
   line-height: 1.25;
