@@ -137,7 +137,7 @@ input[type="radio"] {
 .ballotBox {
   font-weight: bold;
   font-family: 'Arvo', serif;
-  margin: 50px;
+  margin: 1em;
 }
 
 .ballotBox input[type="submit"] {
