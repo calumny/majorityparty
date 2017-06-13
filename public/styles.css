@@ -2,11 +2,9 @@ body {
 
 }
 
-input[type="radio"] {
-  -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
-  -moz-appearance: checkbox;    /* Firefox */
-  -ms-appearance: checkbox;     /* not currently supported */
-  width: 1.5em;
+input[type="checkbox"] {
+  width: 44px;
+  height: 44px;
 }
 
 .ballotBox {

@@ -43,9 +43,9 @@
             <div className="ballotBox">
               <h3>Make Your Selection</h3>
               <form onSubmit={this.submitVote}>
-                <input type="radio" name="candidate" value="redCandidate" checked={this.state.candidateSelection==="redCandidate"} onChange={this.changeSelection}/>{this.state.redCandidate}<hr/>
-                <input type="radio" name="candidate" value="blueCandidate" checked={this.state.candidateSelection==="blueCandidate"} onChange={this.changeSelection}/>{this.state.blueCandidate}<hr/>
-                <input type="radio" name="candidate" value="abstain" checked={this.state.candidateSelection==='abstain'} onChange={this.changeSelection}/> Abstain <br/>
+                <input type="checkbox" name="candidate" value="redCandidate" checked={this.state.candidateSelection==="redCandidate"} onChange={this.changeSelection}/>{this.state.redCandidate}<hr/>
+                <input type="checkbox" name="candidate" value="blueCandidate" checked={this.state.candidateSelection==="blueCandidate"} onChange={this.changeSelection}/>{this.state.blueCandidate}<hr/>
+                <input type="checkbox" name="candidate" value="abstain" checked={this.state.candidateSelection==='abstain'} onChange={this.changeSelection}/> Abstain <br/>
                 <input type="submit" name="voteButton" value="VOTE"/>
               </form>
             </div>
