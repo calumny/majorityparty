@@ -121,6 +121,11 @@ blockquote {
   }
 }
 
+html {
+-ms-touch-action: manipulation;
+touch-action: manipulation;
+}
+
 input[type="radio"] {
   -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
   -moz-appearance: checkbox;    /* Firefox */
