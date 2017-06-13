@@ -1,0 +1,35 @@
+body {
+
+}
+
+input[type="radio"] {
+  -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
+  -moz-appearance: checkbox;    /* Firefox */
+  -ms-appearance: checkbox;     /* not currently supported */
+  width: 1.5em;
+}
+
+.ballotBox {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Arvo', serif;
+  margin: 50px;
+}
+
+.ballotBox input[type="submit"] {
+   font-size: 24px;
+   font-weight: bold;
+   font-family: 'Arvo', serif;
+   border-radius: 3px;
+   margin: 1.2em;
+   padding: 8px;
+   color: white;
+   background-color: #0052a5;
+   border: none;
+   outline: none;
+}
+
+.ballotBox input[type="submit"]:active {
+  background-color: #bf1225;
+  border: none;
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Majority Party</title>
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  
+  <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+  <body>
+    <div id="content">
+    </div>
+    <script type="text/babel">
+
+      class Ballot extends React.Component{
+
+        constructor(props) {
+          super(props);
+          this.state = {isBlue: true, redCandidate:"Greg", blueCandidate:"Connor", candidateSelection:"blueCandidate"};
+          this.changeSelection = this.changeSelection.bind(this);
+          this.submitVote = this.submitVote.bind(this);
+        }
+
+        changeSelection (event) {
+          this.setState({
+            candidateSelection: event.target.value
+          });
+        }
+
+        submitVote(event) {
+          event.preventDefault();
+          console.log(this.state.candidateSelection);
+        }
+
+        render() {
+
+          const isBlue = this.state.isBlue;
+          return (
+            <div className="ballotBox">
+              <h3>Make Your Selection</h3>
+              <form onSubmit={this.submitVote}>
+                <input type="radio" name="candidate" value="redCandidate" checked={this.state.candidateSelection==="redCandidate"} onChange={this.changeSelection}/>{this.state.redCandidate}<hr/>
+                <input type="radio" name="candidate" value="blueCandidate" checked={this.state.candidateSelection==="blueCandidate"} onChange={this.changeSelection}/>{this.state.blueCandidate}<hr/>
+                <input type="radio" name="candidate" value="abstain" checked={this.state.candidateSelection==='abstain'} onChange={this.changeSelection}/> Abstain <br/>
+                <input type="submit" name="voteButton" value="VOTE"/>
+              </form>
+            </div>
+          );
+        }
+      };
+
+      var ContentArea = React.createClass({
+        render: function() {
+          return (
+            <div>
+              <Ballot />
+            </div>
+          );
+        }
+      });
+
+      ReactDOM.render(
+        <Ballot/>,
+        document.getElementById('content')
+      );
+
+    </script>
+  </body>
+</html>
