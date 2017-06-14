@@ -127,11 +127,24 @@ touch-action: manipulation;
 }
 
 input[type="radio"] {
-  -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
-  -moz-appearance: checkbox;    /* Firefox */
-  -ms-appearance: checkbox;     /* not currently supported */
-  width: .15em;
-  height: .15em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  outline: none;
+  position: relative;
+  color: #bf1225;
+  background: #dddddd;
+  width: .2em;
+  height: .2em;
+}
+
+input[type="radio"]:checked::before {
+  content: '✔';
+  position: absolute;
+  top: -.4em;
+  font-size: .4em;
 }
 
 .ballotBox {
