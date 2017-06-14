@@ -137,11 +137,11 @@ touch-action: manipulation;
 	clear:left;
 	float:left;
   color: white;
-	width:60%;
+	width:100%;
 	overflow:hidden;
   display: block;
   position: relative;
-  left: 20%;
+  left: 0%;
 	background:#bf1225 ; /* column 2 background colour */
 }
 #container1 {
