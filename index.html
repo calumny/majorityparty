@@ -6,11 +6,13 @@
     <title>Majority Party</title>
     <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://use.fontawesome.com/40cd73c938.js"></script>
   </head>
 
   <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
   <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script type="text/javascript" src="slogan_generator.js"></script>
 
   <body>
     <div id="content">
@@ -54,18 +56,60 @@
         }
       };
 
-      var ContentArea = React.createClass({
-        render: function() {
+      class TeamName extends React.Component{
+
+        constructor(props) {
+          super(props);
+          this.state = {showTeam:true};
+          this.toggleState = this.toggleState.bind(this);
+        }
+
+        toggleState() {
+          var newVisibility = !this.state.showTeam;
+          this.setState({showTeam:newVisibility})
+        }
+
+        render() {
+          return (
+            <div className="team" onClick={this.toggleState}><h3>You are a {this.state.showTeam ? this.props.team : "Patriot"} {this.state.showTeam ? <i className="fa fa-eye" aria-hidden="true"></i> : <i className="fa fa-eye-slash" aria-hidden="true"></i>}</h3></div>
+          );
+        }
+      }
+
+      class Candidates extends React.Component {
+        constructor(props) {
+          super(props);
+        }
+
+        render() {
+          return (
+            <div id="container2"><div id="container1"><div id="leftCandidate"><h2>Connor</h2>{getSlogan()}</div><div id="rightCandidate"><h2>Greg</h2>{getSlogan()}</div></div></div>
+          );
+        }
+      }
+
+      class ContentArea extends React.Component{
+
+        constructor(props) {
+          super(props);
+          this.state = {
+            timeToVote : true
+          }
+        }
+
+        render() {
           return (
             <div>
-              <Ballot />
+              <TeamName team={this.props.team}/>
+              <Candidates/>
+              {this.state.timeToVote ? <Ballot /> : null }
             </div>
           );
         }
-      });
+      };
 
       ReactDOM.render(
-        <Ballot/>,
+        <ContentArea team="Democrat"/>,
         document.getElementById('content')
       );
 
