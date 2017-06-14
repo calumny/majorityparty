@@ -136,14 +136,14 @@ input[type="radio"] {
   position: relative;
   color: #bf1225;
   background: #dddddd;
-  width: .2em;
-  height: .2em;
+  width: .3em;
+  height: .3em;
 }
 
 input[type="radio"]:checked::before {
   content: "\2713";
   position: absolute;
-  top: -.4em;
+  top: -.35em;
   font-size: .4em;
 }
 
