@@ -136,18 +136,23 @@ touch-action: manipulation;
 #container2 {
 	clear:left;
 	float:left;
-	width:100%;
+  color: white;
+	width:60%;
 	overflow:hidden;
-	background:#ffa7a7; /* column 2 background colour */
+  display: block;
+  position: relative;
+  left: 20%;
+	background:#bf1225 ; /* column 2 background colour */
 }
 #container1 {
 	float:left;
 	width:100%;
 	position:relative;
 	right:50%;
-	background:#fff689; /* column 1 background colour */
+	background:#0052a5; /* column 1 background colour */
 }
 #leftCandidate {
+  text-align: center;
 	float:left;
 	width:46%;
 	position:relative;
@@ -155,6 +160,7 @@ touch-action: manipulation;
 	overflow:hidden;
 }
 #rightCandidate {
+  text-align: center;
 	float:left;
 	width:46%;
 	position:relative;
@@ -188,6 +194,8 @@ input[type="radio"]:checked::before {
 }
 
 .ballotBox {
+  display: block;
+  clear: both;
   font-weight: bold;
   font-family: 'Arvo', serif;
   margin: 1em;
