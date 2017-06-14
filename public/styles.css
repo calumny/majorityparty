@@ -141,7 +141,7 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked::before {
-  content: '✔';
+  content: "\2713";
   position: absolute;
   top: -.4em;
   font-size: .4em;
