@@ -30,6 +30,131 @@ body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2
   }
 }
 
+.talk-bubble {
+	margin: .5em 2em;
+  clear: both;
+  display: inline-block;
+  position: relative;
+  max-width: 40em;
+  min-width: 5em;
+  word-wrap: break-word;
+//	width: 200px;
+	height: auto;
+	background-color: #dddddd;
+}
+
+.chatForm input[type="text"] {
+  width: 80%;
+  font-family: inherit;
+  font-size: 1.5em;
+  height: 3em;
+}
+
+.chatForm input[type="submit"] {
+  border: solid #dddddd;
+  font-family: inherit;
+  height: 3em;
+  font-size: 1.5em;
+  width: 19.5%;
+}
+
+.chatArea {
+  height: 40em;
+  width: 100%;
+  display: block;
+  clear: both;
+  bottom: 0;
+}
+
+#messages {
+  height: 37em;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.noParty {
+  clear: both;
+  width: 100%;
+  text-align: center;
+}
+
+.noParty .talk-bubble{
+  max-width: 40em;
+}
+
+.blueTeam {
+  float: left;
+}
+
+.redTeam {
+  float: right;
+}
+
+.talktext {
+  padding: .5em;
+}
+
+.talktext p {
+  text-align: justify;
+}
+
+.round{
+  border-radius: 1.5em;
+	-webkit-border-radius: 1.5em;
+	-moz-border-radius: 1.5em;
+
+}
+
+.tri-right.blueTeam:after{
+	content: ' ';
+	position: absolute;
+  z-index: -1;
+	width: 0;
+	height: 0;
+  left: -1.5em;
+	right: auto;
+  top: 0px;
+	bottom: auto;
+	border: 1.5em solid;
+	border-color: #dddddd transparent transparent transparent;
+}
+
+.tri-right.redTeam .talktext{
+  text-align: right;
+}
+
+.tri-right.redTeam:after{
+	content: ' ';
+	position: absolute;
+  z-index: -1;
+	width: 0;
+	height: 0;
+  left: auto;
+	right: -1.5em;
+  top: 0px;
+	bottom: auto;
+	border: 1.5em solid;
+	border-color: #dddddd transparent transparent transparent;
+}
+
+.redTeam {
+  color: white;
+  background: #bf1225;
+}
+
+.tri-right.redTeam:after{
+  border-color: #bf1225 transparent transparent transparent;
+}
+
+.blueTeam {
+  color: white;
+  background: #0052a5;
+}
+
+.tri-right.blueTeam:after{
+  border-color: #0052a5 transparent transparent transparent;
+}
+
 h1, .ballotBox, .ballotBox input {
   font-size: 2em;
   /* 2x body copy size = 32px */

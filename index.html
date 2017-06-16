@@ -88,6 +88,103 @@
         }
       }
 
+      class SpeechBubble extends React.Component {
+        render() {
+          return (
+            <div className={this.props.userParty ? '' : "noParty"}>
+              <div className={"talk-bubble tri-right round " + (this.props.userParty ? this.props.userParty : '')}>
+                <div className="talktext">
+                  {this.props.username}
+                  <p>{this.props.text}</p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      class MessageList extends React.Component {
+
+        componentDidUpdate(prevProps, prevState) {
+          var messages = document.getElementById("messages");
+          messages.scrollTop = messages.scrollHeight;
+        }
+
+        render() {
+          return (
+            <div id="messages">
+              {
+                this.props.messages.map((message, i) => {
+                  return (
+                    <SpeechBubble key={i} username={message.username} userParty={message.userParty} text={message.text}/>
+                  );
+                })
+              }
+            </div>
+          );
+        }
+      }
+
+      class MessageForm extends React.Component {
+
+        constructor(props) {
+          super(props);
+          this.state = {text:''};
+          this.handleSubmit = this.handleSubmit.bind(this);
+          this.handleChange = this.handleChange.bind(this);
+        }
+
+        handleSubmit(event) {
+          event.preventDefault();
+          var parties = [null, "redTeam", "blueTeam"]
+          if (this.state.text.trim()!="") {
+            var party = parties[Math.floor(Math.random()*parties.length)];
+            var message = {username:"Connor", text:this.state.text.trim(), userParty:party};
+            this.setState({text:""});
+            this.props.newMessage(message);
+          }
+        }
+
+        handleChange(event) {
+          this.setState({text:event.target.value});
+        }
+
+        render() {
+          return (
+            <div>
+              <form className="chatForm" onSubmit={this.handleSubmit}>
+                <input type="text" onChange={this.handleChange} value={this.state.text}/>
+                <input type="submit" value="Send"/>
+              </form>
+            </div>
+          );
+        }
+      }
+
+      class ChatArea extends React.Component {
+
+        constructor(props) {
+          super(props);
+          this.state = {messages:[]};
+          this.newMessage = this.newMessage.bind(this);
+        }
+
+        newMessage(message) {
+          var newMessages = this.state.messages;
+          newMessages.push(message);
+          this.setState({messages:newMessages});
+        }
+
+        render() {
+          return (
+            <div className="chatArea">
+              <MessageList messages={this.state.messages}/>
+              <MessageForm newMessage={this.newMessage}/>
+            </div>
+          );
+        }
+      }
+
       class ContentArea extends React.Component{
 
         constructor(props) {
@@ -102,6 +199,7 @@
             <div>
               <TeamName team={this.props.team}/>
               <Candidates/>
+              <ChatArea/>
               {this.state.timeToVote ? <Ballot /> : null }
             </div>
           );
