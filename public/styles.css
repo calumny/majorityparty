@@ -31,9 +31,9 @@ body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2
 }
 
 #contentArea {
-  height: 100%;
-  width: 100%;
-  position: fixed;
+  height: 99%;
+  width: 99%;
+//  position: fixed;
 }
 
 .talk-bubble {
@@ -56,18 +56,18 @@ body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2
 }
 
 .chatForm input[type="text"] {
-  width: 80%;
+  width: 60%;
   font-family: inherit;
-  font-size: 1.5em;
-  height: 3em;
+  font-size: 1em;
+  height: 2em;
 }
 
 .chatForm input[type="submit"] {
   border: solid #dddddd;
   font-family: inherit;
-  height: 3em;
-  font-size: 1.5em;
-  width: 19.5%;
+  height: 2em;
+  font-size: 1em;
+  width: 29.5%;
 }
 
 .chatArea {
