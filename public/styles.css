@@ -31,9 +31,6 @@ body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2
 }
 
 #contentArea {
-  height: 99%;
-  width: 99%;
-//  position: fixed;
 }
 
 .talk-bubble {
@@ -51,8 +48,6 @@ body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2
 
 .chatForm {
   width: 100%;
-  position: absolute;
-  bottom: 0;
 }
 
 .chatForm input[type="text"] {
@@ -71,17 +66,15 @@ body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2
 }
 
 .chatArea {
-  height: 70%;
+  height: 40em;
   width: 100%;
   display: block;
-  position: absolute;
-  bottom: 1em;
+  float: left;
 }
 
 #messages {
-//  height: 37em;
+  height: 37em;
   position: relative;
-  max-height: calc(100% - 5em);
   top: 0;
   width: 100%;
   overflow-y: auto;
