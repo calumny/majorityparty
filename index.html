@@ -190,13 +190,13 @@
         constructor(props) {
           super(props);
           this.state = {
-            timeToVote : true
+            timeToVote : false
           }
         }
 
         render() {
           return (
-            <div>
+            <div id="contentArea">
               <TeamName team={this.props.team}/>
               <Candidates/>
               <ChatArea/>
