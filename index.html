@@ -223,10 +223,20 @@
 
         constructor(props) {
           super(props);
+          this.onChange = this.onChange.bind(this);
+          this.state ={maxLength:15};
         }
 
         componentDidMount() {
           document.getElementById('usernameInput').focus();
+        }
+
+        onChange(event) {
+          var text = event.target.value;
+          if (text.length > this.state.maxLength) {
+            var input = document.getElementById("usernameInput");
+            input.value = text.substring(0, this.state.maxLength);
+          }
         }
 
         render() {
@@ -234,7 +244,7 @@
             <div>
               <h2>{"What's your name?"}</h2>
               <form onSubmit={this.props.handleSubmit}>
-                <input maxLength="15" id="usernameInput"/>
+                <input maxLength={this.state.maxLength} id="usernameInput" onChange={this.onChange}/>
               </form>
             </div>
           );
