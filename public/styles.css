@@ -193,7 +193,7 @@ h1, .ballotBox, .ballotBox input {
   font-family: inherit;
   background: #002664;
   color: white;
-  max-width: 100%;
+  max-width: calc(100% - 1em);
   border: none;
   border-bottom: solid white;
   outline: none;
