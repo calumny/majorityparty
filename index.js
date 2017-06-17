@@ -16,7 +16,19 @@ io.on('connection', function(socket){
     console.log('user disconnected');
   });
 
+  socket.on('user join', function(msg){
+    var nick = msg.trim();
+    if (nick.length < 16) {
+      socket.join("test room");
+      socket.nickname = nick;
+      socket.emit('successfully registered', nick);
+      console.log(nick + " joined test room");
+    }
+  });
+
   socket.on('chat message', function(msg){
+    msg["time"] = new Date().getTime();
+    msg["username"] = socket.nickname;
     io.emit('chat message',  msg);
   });
 

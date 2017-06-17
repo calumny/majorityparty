@@ -12,6 +12,7 @@
   <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
   <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="slogan_generator.js"></script>
 
   <body>
@@ -19,11 +20,13 @@
     </div>
     <script type="text/babel">
 
+      var socket = io();
+
       class Ballot extends React.Component{
 
         constructor(props) {
           super(props);
-          this.state = {isBlue: true, redCandidate:"Greg", blueCandidate:"Connor", candidateSelection:"blueCandidate"};
+          this.state = {isBlue: true, redCandidate:"Devin", blueCandidate:"Connor", candidateSelection:"blueCandidate"};
           this.changeSelection = this.changeSelection.bind(this);
           this.submitVote = this.submitVote.bind(this);
         }
@@ -83,7 +86,7 @@
 
         render() {
           return (
-            <div id="container2"><div id="container1"><div id="leftCandidate"><h3>Connor</h3><h5>{getSlogan()}</h5></div><div id="rightCandidate"><h3>Greg</h3><h5>{getSlogan()}</h5></div></div></div>
+            <div id="container2"><div id="container1"><div id="leftCandidate"><h3>Connor</h3><h5>{getSlogan()}</h5></div><div id="rightCandidate"><h3>Devin</h3><h5>{getSlogan()}</h5></div></div></div>
           );
         }
       }
@@ -116,7 +119,7 @@
               {
                 this.props.messages.map((message, i) => {
                   return (
-                    <SpeechBubble key={i} username={message.username} userParty={message.userParty} text={message.text}/>
+                    <SpeechBubble key={message.time} username={message.username} userParty={message.userParty} text={message.text}/>
                   );
                 })
               }
@@ -139,9 +142,11 @@
           var parties = [null, "redTeam", "blueTeam"]
           if (this.state.text.trim()!="") {
             var party = parties[Math.floor(Math.random()*parties.length)];
-            var message = {username:"Connor", text:this.state.text.trim(), userParty:party};
+            var time = new Date().getTime();
+            var message = {text:this.state.text.trim(), userParty:party, time:time};
             this.setState({text:""});
-            this.props.newMessage(message);
+            socket.emit('chat message', message);
+//            this.props.newMessage(message);
           }
         }
 
@@ -167,6 +172,7 @@
           super(props);
           this.state = {messages:[]};
           this.newMessage = this.newMessage.bind(this);
+          socket.on('chat message', this.newMessage)
         }
 
         newMessage(message) {
@@ -185,24 +191,89 @@
         }
       }
 
+      class UserRegister extends React.Component {
+
+        constructor(props) {
+          super(props);
+          this.state = {signingIn : false}
+          this.handleSubmit = this.handleSubmit.bind(this);
+        }
+
+        handleSubmit(event) {
+          event.preventDefault();
+          var usernameInput = document.getElementById('usernameInput');
+          var text = usernameInput.value.trim();
+          if (text != "" && text.length < 16) {
+            socket.emit('user join', text);
+          }
+          this.setState({signingIn:true});
+        }
+
+        render() {
+          return (
+            <div id="registerPage">
+              <h1>Welcome to <span className="highlight">Majority Party</span></h1>
+              {this.state.signingIn ? <h2>Signing In...</h2> : <RegisterForm handleSubmit={this.handleSubmit}/>}
+            </div>
+          );
+        }
+      }
+
+      class RegisterForm extends React.Component {
+
+        constructor(props) {
+          super(props);
+        }
+
+        componentDidMount() {
+          document.getElementById('usernameInput').focus();
+        }
+
+        render() {
+          return (
+            <div>
+              <h2>{"What's your name?"}</h2>
+              <form onSubmit={this.props.handleSubmit}>
+                <input size="15" id="usernameInput"/>
+              </form>
+            </div>
+          );
+        }
+      }
+
       class ContentArea extends React.Component{
+
+        componentDidMount() {
+          socket.on('successfully registered', this.registered)
+        }
 
         constructor(props) {
           super(props);
           this.state = {
             timeToVote : false
           }
+          this.registered = this.registered.bind(this);
+        }
+
+        registered(msg) {
+          this.setState({userRegistered:true, userName:msg});
         }
 
         render() {
-          return (
-            <div id="contentArea">
-              <TeamName team={this.props.team}/>
-              <Candidates/>
-              <ChatArea/>
-              {this.state.timeToVote ? <Ballot /> : null }
-            </div>
-          );
+          if (this.state.userRegistered) {
+            return (
+              <div id="contentArea">
+                  <TeamName team={this.props.team}/>
+                  <Candidates/>
+                  <ChatArea />
+                  {this.state.timeToVote ? <Ballot /> : null }
+              </div>
+            );
+          } else {
+            return (
+              <UserRegister/>
+            )
+          }
         }
       };
 

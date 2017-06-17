@@ -2,6 +2,7 @@ body {
   font-size: 100%;
   font-weight: bold;
   font-family: 'Arvo', serif;
+  margin: 0px;;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
    -khtml-user-select: none; /* Konqueror HTML */
@@ -168,6 +169,36 @@ h1, .ballotBox, .ballotBox input {
   /* 2x body copy size = 32px */
   line-height: 1.25;
   /* 45px / 36px */
+}
+
+#registerPage {
+  width: 100%;
+  height: calc(100% - 4em);
+  padding-top: 4em;
+  text-align: center;
+  position: absolute;
+  color: white;
+  background: #002664;
+}
+
+#registerPage .highlight {
+  color: #bf1225;
+}
+
+#registerPage form {
+  outline: none;
+}
+
+#registerPage form input {
+  font-family: inherit;
+  background: #002664;
+  color: white;
+  border: none;
+  border-bottom: solid white;
+  outline: none;
+  text-align: center;
+  font-size: 3em;
+    text-shadow: 0 0 20px #002664;
 }
 
 @media (min-width: 43.75em) {
