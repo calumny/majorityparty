@@ -193,12 +193,13 @@ h1, .ballotBox, .ballotBox input {
   font-family: inherit;
   background: #002664;
   color: white;
+  max-width: 100%;
   border: none;
   border-bottom: solid white;
   outline: none;
   text-align: center;
   font-size: 3em;
-    text-shadow: 0 0 20px #002664;
+  text-shadow: 0 0 20px #002664;
 }
 
 @media (min-width: 43.75em) {
