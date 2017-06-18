@@ -19,11 +19,26 @@ io.on('connection', function(socket){
   socket.on('user join', function(msg){
     var nick = msg.trim();
     if (nick.length < 16) {
-      socket.join("test room");
       socket.nickname = nick;
       socket.emit('successfully registered', nick);
-      console.log(nick + " joined test room");
     }
+  });
+
+  socket.on('join room', function(msg){
+    var roomName = msg.trim().toLowerCase();
+    if (roomName.length == 4) {
+      socket.join(roomName);
+      socket.emit('successfully joined room');
+      console.log(socket.nickname + " joined room " + roomName);
+    } else {
+      socket.emit('invalid room');
+    }
+  });
+
+  socket.on('join public room', function(){
+    var roomName = 'test room';
+    socket.emit('successfully joined room');
+    console.log(socket.nickname + " joined room " + roomName);
   });
 
   socket.on('chat message', function(msg){

@@ -251,10 +251,84 @@
         }
       }
 
+      class JoinRoomForm extends React.Component {
+
+        constructor(props) {
+          super(props);
+          this.onChange = this.onChange.bind(this);
+          this.state ={maxLength:4};
+        }
+
+        componentDidMount() {
+          document.getElementById('roomNameInput').focus();
+        }
+
+        onChange(event) {
+          var text = event.target.value;
+          if (text.length > this.state.maxLength) {
+            var input = document.getElementById("roomNameInput");
+            input.value = text.substring(0, this.state.maxLength);
+          }
+        }
+
+        render() {
+          return (
+            <div>
+              <h2>{"Do you have a room code?"}</h2>
+              <form onSubmit={this.props.handleSubmit}>
+                <input maxLength={this.state.maxLength} id="roomNameInput" onChange={this.onChange}/>
+              </form>
+              <form onSubmit={this.props.joinPublicRoom}>
+                <h2>or</h2>
+                <button value="joinPublicRoom" type="submit"><h2>Join Public Room</h2></button>
+              </form>
+            </div>
+          );
+        }
+      }
+
+      class JoinRoomPage extends React.Component {
+
+        constructor(props) {
+          super(props);
+          this.state = {joiningRoom : false}
+          this.handleSubmit = this.handleSubmit.bind(this);
+          this.joinPublicRoom = this.joinPublicRoom.bind(this);
+        }
+
+        handleSubmit(event) {
+          event.preventDefault();
+          var roomName = document.getElementById('roomNameInput');
+          var text = roomName.value.trim();
+          if (text != "" && text.length == 4) {
+            socket.emit('join room', text);
+            console.log('join room ' + text);
+          }
+          this.setState({joiningRoom:true});
+        }
+
+        joinPublicRoom(event) {
+          event.preventDefault();
+          socket.emit('join public room');
+          console.log('join public room');
+          this.setState({joiningRoom:true});
+        }
+
+        render() {
+          return (
+            <div id="registerPage">
+              <h1>Welcome, <span className="highlight">{this.props.username}</span>!</h1>
+              {this.state.joiningRoom ? <h2>Searching for Room...</h2> : <JoinRoomForm handleSubmit={this.handleSubmit} joinPublicRoom={this.joinPublicRoom}/>}
+            </div>
+          );
+        }
+      }
+
       class ContentArea extends React.Component{
 
         componentDidMount() {
-          socket.on('successfully registered', this.registered)
+          socket.on('successfully registered', this.registered);
+          socket.on('successfully joined room', this.joinedRoom);
         }
 
         constructor(props) {
@@ -263,14 +337,21 @@
             timeToVote : false
           }
           this.registered = this.registered.bind(this);
+          this.joinedRoom = this.joinedRoom.bind(this);
         }
 
         registered(msg) {
           this.setState({userRegistered:true, userName:msg});
+          console.log("registered");
+        }
+
+        joinedRoom(msg) {
+          this.setState({inRoom:true});
+          console.log("joined room");
         }
 
         render() {
-          if (this.state.userRegistered) {
+          if (this.state.userRegistered && this.state.inRoom) {
             return (
               <div id="contentArea">
                   <TeamName team={this.props.team}/>
@@ -279,6 +360,10 @@
                   {this.state.timeToVote ? <Ballot /> : null }
               </div>
             );
+          } else if (this.state.userRegistered) {
+            return (
+              <JoinRoomPage username={this.state.userName}/>
+            )
           } else {
             return (
               <UserRegister/>

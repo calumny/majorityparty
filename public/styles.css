@@ -189,17 +189,32 @@ h1, .ballotBox, .ballotBox input {
   outline: none;
 }
 
+#roomNameInput {
+  max-width: 6em;
+}
+
+#usernameInput {
+  max-width: calc(100% - 0.5em);
+}
+
 #registerPage form input {
   font-family: inherit;
   background: #002664;
   color: white;
-  max-width: calc(100% - 1em);
   border: none;
   border-bottom: solid white;
   outline: none;
   text-align: center;
   font-size: 3em;
   text-shadow: 0 0 20px #002664;
+}
+
+#registerPage button {
+  color: white;
+  font-family: inherit;
+  border: none;
+  border-radius: .2em;
+  background: #bf1225;
 }
 
 @media (min-width: 43.75em) {
