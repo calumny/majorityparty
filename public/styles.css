@@ -171,7 +171,7 @@ h1, .ballotBox, .ballotBox input {
   /* 45px / 36px */
 }
 
-#registerPage {
+#registerPage, #lobby {
   width: 100%;
   height: calc(100% - 4em);
   padding-top: 4em;
@@ -209,7 +209,7 @@ h1, .ballotBox, .ballotBox input {
   text-shadow: 0 0 20px #002664;
 }
 
-#registerPage button {
+#registerPage button, #lobby button {
   color: white;
   font-family: inherit;
   border: none;

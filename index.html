@@ -219,6 +219,24 @@
         }
       }
 
+      class Lobby extends React.Component {
+        render() {
+          return (
+            <div id="lobby">
+              <h1>Players</h1>
+              {
+                this.props.players.map((nickname, i) => {
+                  return (
+                    <h2 key={nickname}>{nickname}</h2>
+                  );
+                })
+              }
+              {this.props.enoughPlayers ? <button><h3>Start game</h3></button> :"Waiting for players..."}
+            </div>
+          );
+        }
+      }
+
       class RegisterForm extends React.Component {
 
         constructor(props) {
@@ -324,50 +342,98 @@
         }
       }
 
+      var roomStates = {
+        nameRegistration:"nameRegistration",
+        roomForm:"roomForm",
+        roomLobby:"roomLobby",
+        announceCandidates:"announceCandidates",
+        candidateDiscussion:"candidateDiscussion",
+        election:"election",
+        announcePresident:"announcePresident"
+      }
+
       class ContentArea extends React.Component{
 
         componentDidMount() {
           socket.on('successfully registered', this.registered);
           socket.on('successfully joined room', this.joinedRoom);
+          socket.on('new player joined room', this.otherPlayerJoinedRoom);
+          socket.on('enough players', this.enoughPlayers);
         }
 
         constructor(props) {
           super(props);
           this.state = {
-            timeToVote : false
+            currentRoomState : roomStates.nameRegistration,
+            enoughPlayers : false
           }
           this.registered = this.registered.bind(this);
           this.joinedRoom = this.joinedRoom.bind(this);
+          this.otherPlayerJoinedRoom =  this.otherPlayerJoinedRoom.bind(this);
+          this.enoughPlayers = this.enoughPlayers.bind(this);
         }
 
         registered(msg) {
-          this.setState({userRegistered:true, userName:msg});
-          console.log("registered");
+          this.setState({currentRoomState:roomStates.roomForm, userName:msg});
         }
 
         joinedRoom(msg) {
-          this.setState({inRoom:true});
-          console.log("joined room");
+          this.setState({currentRoomState:roomStates.roomLobby, players:msg});
+        }
+
+        enoughPlayers() {
+          this.setState({enoughPlayers:true});
+        }
+
+        otherPlayerJoinedRoom(msg) {
+          this.setState({players:msg});
         }
 
         render() {
+
+          switch (this.state.currentRoomState) {
+            case roomStates.election:
+              return (
+                <div id="contentArea">
+                    <TeamName team={this.props.team}/>
+                    <Ballot />
+                </div>
+              );
+              break;
+            case roomStates.candidateDiscussion:
+              return (
+                <div id="contentArea">
+                    <TeamName team={this.props.team}/>
+                    <Candidates/>
+                    <ChatArea />
+                </div>
+              );
+              break;
+            case roomStates.roomLobby:
+              return (
+                <Lobby players={this.state.players} enoughPlayers={this.state.enoughPlayers}/>
+              );
+              break;
+            case roomStates.roomForm:
+              return (
+                <JoinRoomPage username={this.state.userName}/>
+              );
+              break;
+            case roomStates.nameRegistration:
+              return (
+                <UserRegister/>
+              );
+              break;
+            default:
+              return (
+                <UserRegister/>
+              );
+              break;
+          }
+
           if (this.state.userRegistered && this.state.inRoom) {
-            return (
-              <div id="contentArea">
-                  <TeamName team={this.props.team}/>
-                  <Candidates/>
-                  <ChatArea />
-                  {this.state.timeToVote ? <Ballot /> : null }
-              </div>
-            );
           } else if (this.state.userRegistered) {
-            return (
-              <JoinRoomPage username={this.state.userName}/>
-            )
           } else {
-            return (
-              <UserRegister/>
-            )
           }
         }
       };
