@@ -26,6 +26,10 @@
     </div>
     <script type="text/babel">
 
+      var hackerIntro = "<h3>You are a Russian</h3>You want to use your abilities to prevent the Americans from scoring 15 points";
+      var partyIntro = "<h3>You are a PARTY</h3>You want more points than the OPPOSITION, but you need America to score at least 15 points";
+      var swingIntro = "<h3>You are a Swing Voter</h3>You want America to score at least 15 points";
+
       var socket = io();
 
       class Ballot extends React.Component{
@@ -437,6 +441,33 @@
 
         startingGame(msg) {
           this.setState({currentRoomState:roomStates.gameIntro, team:msg});
+          switch (this.state.team) {
+            case "Russian":
+              swal({
+                html: hackerIntro,
+                allowOutsideClick: false
+              });
+              break;
+            case "Republican":
+              swal({
+                html: partyIntro.replace("PARTY", "Republican").replace("OPPOSITION", "Democrats"),
+                allowOutsideClick: false
+              });
+              break;
+            case "Democrat":
+              swal({
+                html: partyIntro.replace("PARTY", "Democrat").replace("OPPOSITION", "Republicans"),
+                allowOutsideClick: false
+              });
+              break;
+            case "Swing Voter":
+              swal({
+                html: swingIntro,
+                allowOutsideClick: false
+              });
+              break;
+
+          }
           swal('any fool can use a computer');
         }
 
