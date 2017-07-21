@@ -219,6 +219,34 @@
         }
       }
 
+      class StartGameButton extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {countdownBegun:false};
+          this.startGameCountdown =  this.startGameCountdown.bind(this);
+          this.cancelGameCountdown =  this.cancelGameCountdown.bind(this);
+
+        }
+
+        startGameCountdown() {
+          socket.emit('start game countdown', this.props.roomName);
+          console.log('start game in ' + this.props.roomName);
+        }
+
+        cancelGameCountdown() {
+          socket.emit('cancel game countdown', this.props.roomName);
+        }
+
+        render() {
+          return (
+            <div>
+              {this.state.countdownBegun ? <button onClick={this.cancelGameCountdown}><h3>Cancel</h3></button> : <button onClick={this.startGameCountdown}><h3>Start Game</h3></button>}
+            </div>
+          );
+        }
+
+      }
+
       class Lobby extends React.Component {
         render() {
           return (
@@ -231,7 +259,7 @@
                   );
                 })
               }
-              {this.props.enoughPlayers ? <button><h3>Start game</h3></button> :"Waiting for players..."}
+              {this.props.enoughPlayers ? <StartGameButton roomName={this.props.roomName}/> :"Waiting for players..."}
             </div>
           );
         }
@@ -309,9 +337,11 @@
 
         constructor(props) {
           super(props);
-          this.state = {joiningRoom : false}
+          this.state = {joiningRoom : false, failedToJoin:false, attemptedRoom:null};
           this.handleSubmit = this.handleSubmit.bind(this);
           this.joinPublicRoom = this.joinPublicRoom.bind(this);
+          this.failedToJoin = this.failedToJoin.bind(this);
+          socket.on('failed to join room', this.failedToJoin);
         }
 
         handleSubmit(event) {
@@ -319,15 +349,29 @@
           var roomName = document.getElementById('roomNameInput');
           var text = roomName.value.trim();
           if (text != "" && text.length == 4) {
-            socket.emit('join room', text);
+            this.setState({joiningRoom:true, attemptedRoom:text, failedToJoin:false});
             console.log('join room ' + text);
+            socket.emit('join room', text, function(response) {
+              if (response.error) {
+                console.log(response.error);
+                this.failedToJoin();
+              }
+            }.bind(this));
           }
-          this.setState({joiningRoom:true});
+        }
+
+        failedToJoin() {
+          this.setState({failedToJoin:true, joiningRoom:false});
         }
 
         joinPublicRoom(event) {
           event.preventDefault();
-          socket.emit('join public room');
+          socket.emit('join public room', function(response) {
+            if (response.error) {
+              console.log(response.error);
+              this.failedToJoin();
+            }
+          }.bind(this));
           console.log('join public room');
           this.setState({joiningRoom:true});
         }
@@ -336,6 +380,7 @@
           return (
             <div id="registerPage">
               <h1>Welcome, <span className="highlight">{this.props.username}</span>!</h1>
+              {this.state.failedToJoin ? <h3 className="highlight">We couldn&#39;t find a room with the code {this.state.attemptedRoom}</h3> : null}
               {this.state.joiningRoom ? <h2>Searching for Room...</h2> : <JoinRoomForm handleSubmit={this.handleSubmit} joinPublicRoom={this.joinPublicRoom}/>}
             </div>
           );
@@ -346,6 +391,7 @@
         nameRegistration:"nameRegistration",
         roomForm:"roomForm",
         roomLobby:"roomLobby",
+        gameIntro:"gameIntro",
         announceCandidates:"announceCandidates",
         candidateDiscussion:"candidateDiscussion",
         election:"election",
@@ -359,18 +405,32 @@
           socket.on('successfully joined room', this.joinedRoom);
           socket.on('new player joined room', this.otherPlayerJoinedRoom);
           socket.on('enough players', this.enoughPlayers);
+          socket.on('starting game', this.startingGame);
+          socket.io.on('connect_error', this.connectionError);
         }
 
         constructor(props) {
           super(props);
           this.state = {
             currentRoomState : roomStates.nameRegistration,
-            enoughPlayers : false
+            enoughPlayers : false,
+            team : null,
+            roomName : null
           }
           this.registered = this.registered.bind(this);
           this.joinedRoom = this.joinedRoom.bind(this);
           this.otherPlayerJoinedRoom =  this.otherPlayerJoinedRoom.bind(this);
           this.enoughPlayers = this.enoughPlayers.bind(this);
+          this.connectionError = this.connectionError.bind(this);
+          this.startingGame = this.startingGame.bind(this);
+        }
+
+        connectionError() {
+          console.log('connection error');
+        }
+
+        startingGame(msg) {
+          this.setState({currentRoomState:roomStates.gameIntro, team:msg});
         }
 
         registered(msg) {
@@ -378,7 +438,7 @@
         }
 
         joinedRoom(msg) {
-          this.setState({currentRoomState:roomStates.roomLobby, players:msg});
+          this.setState({currentRoomState:roomStates.roomLobby, players:msg.players, roomName:msg.roomName});
         }
 
         enoughPlayers() {
@@ -395,15 +455,21 @@
             case roomStates.election:
               return (
                 <div id="contentArea">
-                    <TeamName team={this.props.team}/>
+                    <TeamName team={this.state.team}/>
                     <Ballot />
                 </div>
               );
               break;
+            case roomStates.gameIntro:
+              return (
+                <div id="contentArea">
+                    <TeamName team={this.state.team}/>
+                </div>
+              );
             case roomStates.candidateDiscussion:
               return (
                 <div id="contentArea">
-                    <TeamName team={this.props.team}/>
+                    <TeamName team={this.state.team}/>
                     <Candidates/>
                     <ChatArea />
                 </div>
@@ -411,7 +477,7 @@
               break;
             case roomStates.roomLobby:
               return (
-                <Lobby players={this.state.players} enoughPlayers={this.state.enoughPlayers}/>
+                <Lobby roomName={this.state.roomName} players={this.state.players} enoughPlayers={this.state.enoughPlayers}/>
               );
               break;
             case roomStates.roomForm:
@@ -439,7 +505,7 @@
       };
 
       ReactDOM.render(
-        <ContentArea team="Democrat"/>,
+        <ContentArea/>,
         document.getElementById('content')
       );
 
